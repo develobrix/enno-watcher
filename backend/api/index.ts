@@ -10,6 +10,7 @@ export type StationInfoResponse = {
         linie: string,
         ziel: string,
         gleis?: string,
+        gleiswechsel?: string,
         zeit: string,
         prognosemin: string,
         ausfall: string,

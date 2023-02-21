@@ -7,7 +7,8 @@ export type StationInfo = {
     departures: {
         line: Line,
         target: Station,
-        track?: string,
+        platform?: string,
+        newPlatform?: string,
         time: string,
         delay: number,
         reason?: string,
@@ -21,16 +22,16 @@ const isValidStation = (station: string): station is Station =>
 const mapToStationInfo = (stationInfoResponse: StationInfoResponse): StationInfo => ({
     departures: stationInfoResponse.abfahrt
         .map(abfahrt => ({
-            line: abfahrt.linie,
-            target: Object.entries(Station).find(([_, value]) => value === abfahrt.ziel)?.[0],
+            line: abfahrt.linie as Line,
+            target: Object.entries(Station).find(([_, value]) => value === abfahrt.ziel)?.[0] as Station,
             time: abfahrt.zeit,
             delay: Number.parseInt(abfahrt.prognosemin),
             cancelled: abfahrt.ausfall === 'true',
             ...removeUndefinedProperties({
-                track: abfahrt.gleis,
+                platform: abfahrt.gleis,
+                newPlatform: abfahrt.gleiswechsel,
                 reason: abfahrt.ursachetext,
             }),
-
         })),
 });
 
